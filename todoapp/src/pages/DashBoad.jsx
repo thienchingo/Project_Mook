@@ -29,7 +29,7 @@ function DashBoad() {
   }, [tasks, error, dispatch]);
   useEffect(() => {
     dispatch(autoCheckExpridedTask());
-  }, [tasks]);
+  }, [tasks,dispatch]);
   return (
     <ul className={clsx(style.todoList)}>
       <span style={{ color: "green", display: "inline-block", marginLeft: 7 }}>

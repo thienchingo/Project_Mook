@@ -1,5 +1,5 @@
 import { isEmpty } from "lodash";
-import compare, { compareDateExprided } from "../../helps/utils";
+import compare, { compareDate, compareDateExprided } from "../../helps/utils";
 import {
   ADD_TASK,
   AUTO_CHECK_EXPRIDED_TASK,
@@ -14,6 +14,7 @@ import {
   INPUT_TASK_NAME,
   INPUT_TASK_START_DATE,
   RESET_MESSAGE,
+  SEARCH_TASK,
   VIEW_TASK,
 } from "./actionType";
 const initialState = {
@@ -27,6 +28,7 @@ const initialState = {
     keyStartDate: "",
     keyEndDate: "",
   },
+  searchResult: [],
   error: {},
   tasks: [],
   finalTasks: [],
@@ -68,9 +70,13 @@ const TodoReducer = (state = initialState, action) => {
       };
       return state;
     case VIEW_TASK:
-      const task = state.tasks.filter((ts) => ts.id === action.payload);
-      console.log({ mytask: task });
-      if (task) {
+      let allTask2 = [
+        ...state.tasks,
+        ...state.finalTasks,
+        ...state.expridedTask,
+      ];
+      let task = allTask2.filter((ts) => ts.id === action.payload);
+      if (task.length > 0) {
         state = {
           ...state,
           name: task[0].name,
@@ -105,7 +111,13 @@ const TodoReducer = (state = initialState, action) => {
         };
       }
       const task2 = state.tasks.filter((ts) => ts.id !== action.payload.id);
-      if (task2 && task2.length < state.tasks.length) {
+      const exprided = state.expridedTask.filter(
+        (ts) => ts.id !== action.payload.id
+      );
+      if (
+        (task2 && task2.length < state.tasks.length) ||
+        exprided.length < state.expridedTask.length
+      ) {
         const newTasks = [...task2, action.payload];
 
         state = {
@@ -116,6 +128,7 @@ const TodoReducer = (state = initialState, action) => {
           startDate: action.payload.startDate,
           endDate: action.payload.endDate,
           id: action.payload.id,
+          expridedTask: exprided.sort(compare),
           error: {
             successed: "Edit task completed!",
           },
@@ -149,13 +162,25 @@ const TodoReducer = (state = initialState, action) => {
       });
     case FINISHED_TASK:
       const inprogressTask = state.tasks.filter((i) => i.id !== action.payload);
-      const finishTask = state.tasks.filter((i) => i.id === action.payload);
+      const finishTask = state.tasks
+        .filter((i) => i.id === action.payload)
+        .map((ts) => {
+          return {
+            ...ts,
+            type: 2,
+          };
+        });
       const expridedTasks = state.expridedTask.filter(
         (i) => i.id !== action.payload
       );
-      const expridedFnTasks = state.expridedTask.filter(
-        (i) => i.id === action.payload
-      );
+      const expridedFnTasks = state.expridedTask
+        .filter((i) => i.id === action.payload)
+        .map((ts) => {
+          return {
+            ...ts,
+            type: 2,
+          };
+        });
       return (state = {
         ...state,
         tasks: inprogressTask.sort(compare),
@@ -171,9 +196,14 @@ const TodoReducer = (state = initialState, action) => {
       });
     case AUTO_CHECK_EXPRIDED_TASK:
       const currentDate = new Date();
-      const listExpridedTask = state.tasks.filter((ts) =>
-        compareDateExprided(currentDate, ts)
-      );
+      const listExpridedTask = state.tasks
+        .filter((ts) => compareDateExprided(currentDate, ts))
+        .map((ts) => {
+          return {
+            ...ts,
+            type: 3,
+          };
+        });
       const currentTasks = state.tasks.filter(
         (ts) => !compareDateExprided(currentDate, ts)
       );
@@ -193,7 +223,7 @@ const TodoReducer = (state = initialState, action) => {
       state = {
         ...state,
         searchKey: newKeySearch1,
-      }
+      };
       return state;
     case INPUT_SEARCH_START_DATE:
       const newKeySearch2 = {
@@ -203,7 +233,7 @@ const TodoReducer = (state = initialState, action) => {
       state = {
         ...state,
         searchKey: newKeySearch2,
-      }
+      };
       return state;
     case INPUT_SEARCH_END_DATE:
       const newKeySearch3 = {
@@ -213,7 +243,32 @@ const TodoReducer = (state = initialState, action) => {
       state = {
         ...state,
         searchKey: newKeySearch3,
+      };
+      return state;
+    case SEARCH_TASK:
+      let allTask = [
+        ...state.tasks,
+        ...state.finalTasks,
+        ...state.expridedTask,
+      ];
+
+      if (action.payload.keyName !== "") {
+        allTask = allTask.filter((ts) => ts.name === action.payload.keyName);
       }
+      if (action.payload.keyStartDate !== "") {
+        allTask = allTask.filter((ts) =>
+          compareDate(action.payload.keyStartDate, ts.startDate)
+        );
+      }
+      if (action.payload.keyEndDate !== "") {
+        allTask = allTask.filter((ts) =>
+          compareDate(ts.startDate, action.payload.keyEndDate)
+        );
+      }
+      state = {
+        ...state,
+        searchResult: allTask,
+      };
       return state;
     default:
       return (state = { ...state });

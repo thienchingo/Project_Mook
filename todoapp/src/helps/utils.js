@@ -13,3 +13,8 @@ export function compareDateExprided(currentDate, obj) {
   }
   return false;
 }
+export function compareDate(date1, date2) {
+  const obj1 = new Date(date1).getTime();
+  const obj2 = new Date(date2).getTime();
+  return obj1 >= obj2;
+}

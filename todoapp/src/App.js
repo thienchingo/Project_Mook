@@ -2,11 +2,11 @@ import clsx from "clsx";
 import React, { useState } from "react";
 import { Link, Route, Routes } from "react-router-dom";
 import style from "./App.module.scss";
-import Dashboad from "./components/DashBoad";
-import DetailTaskPage from "./components/DetailTaskPage";
+import Dashboad from "./pages/DashBoad";
+import DetailTaskPage from "./pages/DetailTaskPage";
 import Footer from "./components/Footer";
-import InputTask from "./components/InputTask";
-import SearchTask from "./components/SearchTask";
+import InputTask from "./pages/InputTask";
+import SearchTask from "./pages/SearchTask";
 function App() {
   const [isActive, setIsActive] = useState(1);
   const handleOnClick = (index) => {
@@ -30,6 +30,15 @@ function App() {
             <Link
               onClick={() => handleOnClick(2)}
               className={clsx({ [style.active]: 2 === isActive })}
+              to="/search"
+            >
+              Search Task
+            </Link>
+          </li>
+          <li>
+            <Link
+              onClick={() => handleOnClick(3)}
+              className={clsx({ [style.active]: 3 === isActive })}
               to="/input-task"
             >
               NewTask
@@ -37,9 +46,9 @@ function App() {
           </li>
         </ul>
       </nav>
-      {1=== isActive && <SearchTask /> }
       <Routes>
         <Route path="/" element={<Dashboad />} />
+        <Route path="/search" element={<SearchTask />} />
         <Route path="/details/:idTask" element={<DetailTaskPage />} />
         <Route path="/input-task" element={<InputTask />} />
       </Routes>

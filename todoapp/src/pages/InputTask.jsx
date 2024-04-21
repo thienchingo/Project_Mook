@@ -23,14 +23,14 @@ function InputTask() {
     dispatch(inputTaskDescription(""));
     dispatch(inputTaskStartDate(""));
     dispatch(inputTaskEndDate(""));
-  }, []);
+  }, [dispatch]);
   useEffect(() => {
     console.log({ error: error });
     const timerId = setTimeout(() => {
       if (!isEmpty(error)) dispatch(resetMessage());
     }, 1000);
     return () => clearTimeout(timerId);
-  }, [error]);
+  }, [dispatch, error]);
   return (
     <div className={clsx(style.inputField)}>
       <h1>Input task</h1>
@@ -89,6 +89,7 @@ function InputTask() {
               description,
               startDate,
               endDate,
+              type: 1,
               id: uuidv4(),
             })
           )
