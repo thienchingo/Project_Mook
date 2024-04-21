@@ -15,7 +15,6 @@ function Footer() {
         </span>{" "}
          tasks
       </span>
-      {/* <button className={clsx(style.button_footer)}>Clear All</button> */}
     </div>
   );
 }

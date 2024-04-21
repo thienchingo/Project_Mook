@@ -10,7 +10,7 @@ import {
   deleteTask,
   finishedTask,
   resetMessage,
-} from "./../store/todoTask/action";
+} from "../store/todoTask/action";
 import { useEffect } from "react";
 import { isEmpty } from "lodash";
 function DashBoad() {
@@ -30,7 +30,6 @@ function DashBoad() {
   useEffect(() => {
     dispatch(autoCheckExpridedTask());
   }, [tasks]);
-  console.log({ final: finalTasks });
   return (
     <ul className={clsx(style.todoList)}>
       <span style={{ color: "green", display: "inline-block", marginLeft: 7 }}>

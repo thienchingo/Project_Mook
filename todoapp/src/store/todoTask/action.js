@@ -13,6 +13,9 @@ import {
   INPUT_TASK_END_DATE,
   RESET_MESSAGE,
   AUTO_CHECK_EXPRIDED_TASK,
+  INPUT_SEARCH_NAME,
+  INPUT_SEARCH_START_DATE,
+  INPUT_SEARCH_END_DATE,
 } from "./actionType";
 export const inputTaskName = (payload) => {
   return {
@@ -95,6 +98,24 @@ export const resetMessage = () => {
 };
 export const autoCheckExpridedTask = () => {
   return {
-    type: AUTO_CHECK_EXPRIDED_TASK
+    type: AUTO_CHECK_EXPRIDED_TASK,
+  };
+};
+export const inputSearchName = (payload) => {
+  return {
+    type: INPUT_SEARCH_NAME,
+    payload,
+  };
+};
+export const inputSearchStartDate = (payload) => {
+  return {
+    type: INPUT_SEARCH_START_DATE,
+    payload,
+  };
+};
+export const inputSearchEndDate = (payload) => {
+  return {
+    type: INPUT_SEARCH_END_DATE,
+    payload,
   };
 };

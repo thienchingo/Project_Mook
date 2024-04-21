@@ -6,6 +6,7 @@ import Dashboad from "./components/DashBoad";
 import DetailTaskPage from "./components/DetailTaskPage";
 import Footer from "./components/Footer";
 import InputTask from "./components/InputTask";
+import SearchTask from "./components/SearchTask";
 function App() {
   const [isActive, setIsActive] = useState(1);
   const handleOnClick = (index) => {
@@ -36,6 +37,7 @@ function App() {
           </li>
         </ul>
       </nav>
+      {1=== isActive && <SearchTask /> }
       <Routes>
         <Route path="/" element={<Dashboad />} />
         <Route path="/details/:idTask" element={<DetailTaskPage />} />

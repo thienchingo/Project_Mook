@@ -6,6 +6,9 @@ import {
   DELETE_TASK,
   FINISHED_TASK,
   GET_STATE,
+  INPUT_SEARCH_END_DATE,
+  INPUT_SEARCH_NAME,
+  INPUT_SEARCH_START_DATE,
   INPUT_TASK_DESCRIPTION,
   INPUT_TASK_END_DATE,
   INPUT_TASK_NAME,
@@ -19,6 +22,11 @@ const initialState = {
   startDate: "",
   endDate: "",
   id: "",
+  searchKey: {
+    keyName: "",
+    keyStartDate: "",
+    keyEndDate: "",
+  },
   error: {},
   tasks: [],
   finalTasks: [],
@@ -175,6 +183,36 @@ const TodoReducer = (state = initialState, action) => {
           tasks: currentTasks.sort(compare),
           expridedTask: [...listExpridedTask],
         };
+      }
+      return state;
+    case INPUT_SEARCH_NAME:
+      const newKeySearch1 = {
+        ...state.searchKey,
+        keyName: action.payload,
+      };
+      state = {
+        ...state,
+        searchKey: newKeySearch1,
+      }
+      return state;
+    case INPUT_SEARCH_START_DATE:
+      const newKeySearch2 = {
+        ...state.searchKey,
+        keyStartDate: action.payload,
+      };
+      state = {
+        ...state,
+        searchKey: newKeySearch2,
+      }
+      return state;
+    case INPUT_SEARCH_END_DATE:
+      const newKeySearch3 = {
+        ...state.searchKey,
+        keyEndDate: action.payload,
+      };
+      state = {
+        ...state,
+        searchKey: newKeySearch3,
       }
       return state;
     default:

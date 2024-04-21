@@ -3,47 +3,46 @@ import { FcSearch } from "react-icons/fc";
 import { useDispatch, useSelector } from "react-redux";
 import style from "../App.module.scss";
 import {
-  inputTaskEndDate,
-  inputTaskName,
-  inputTaskStartDate,
+  inputSearchEndDate,
+  inputSearchName,
+  inputSearchStartDate,
   searchTask,
 } from "../store/todoTask/action";
 
 function SearchTask() {
   const dispatch = useDispatch();
-  const { name, startDate, endDate } = useSelector(
-    (state) => state.TodoReducer
-  );
-
+  const { searchKey } = useSelector((state) => state.TodoReducer);
+  const { keyName, keyStartDate, keyEndDate } = searchKey;
+  console.log(searchKey);
   return (
     <div className={clsx(style.inputField)}>
       <h1>Search Task</h1>
       <input
         type="text"
-        onChange={(e) => dispatch(inputTaskName(e.target.value))}
+        onChange={(e) => dispatch(inputSearchName(e.target.value))}
         placeholder="Add your new todo"
-        value={name}
+        value={keyName}
       />
       <input
         type="date"
-        onChange={(e) => dispatch(inputTaskStartDate(e.target.value))}
+        onChange={(e) => dispatch(inputSearchStartDate(e.target.value))}
         placeholder="Start"
-        value={startDate}
+        value={keyStartDate}
       />
       <input
         type="date"
-        onChange={(e) => dispatch(inputTaskEndDate(e.target.value))}
+        onChange={(e) => dispatch(inputSearchEndDate(e.target.value))}
         placeholder="Deadline"
-        value={endDate}
+        value={keyEndDate}
       />
       <button
         className={clsx(style.button_input)}
         onClick={() =>
           dispatch(
             searchTask({
-              name,
-              startDate,
-              endDate,
+              keyName,
+              keyStartDate,
+              keyEndDate,
             })
           )
         }
