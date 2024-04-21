@@ -9,11 +9,11 @@ function Footer() {
   return (
     <div className={clsx(style.footer)}>
       <span>
-        You have{" "}
+        Total{" "}
         <span className={clsx(style.pendingTasks)}>
           {tasks.length + finalTasks.length + expridedTask.length}
         </span>{" "}
-        pending tasks
+         tasks
       </span>
       {/* <button className={clsx(style.button_footer)}>Clear All</button> */}
     </div>

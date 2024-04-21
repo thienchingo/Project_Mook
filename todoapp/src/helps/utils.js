@@ -7,3 +7,9 @@ export default function compare(a, b) {
   }
   return 0;
 }
+export function compareDateExprided(currentDate, obj) {
+  if (currentDate.getTime() > new Date(obj.endDate).getTime()) {
+    return true;
+  }
+  return false;
+}

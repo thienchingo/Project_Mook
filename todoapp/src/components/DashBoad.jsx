@@ -6,6 +6,7 @@ import { HiPencilAlt } from "react-icons/hi";
 import { IoTrashBinSharp } from "react-icons/io5";
 import { TiTickOutline } from "react-icons/ti";
 import {
+  autoCheckExpridedTask,
   deleteTask,
   finishedTask,
   resetMessage,
@@ -26,7 +27,9 @@ function DashBoad() {
     }, 1000);
     return () => clearTimeout(timerId);
   }, [tasks, error, dispatch]);
-
+  useEffect(() => {
+    dispatch(autoCheckExpridedTask());
+  }, [tasks]);
   console.log({ final: finalTasks });
   return (
     <ul className={clsx(style.todoList)}>
@@ -37,7 +40,7 @@ function DashBoad() {
       {tasks &&
         tasks.map((task) => {
           return (
-            <li key={task.id}>
+            <li style={{backgroundColor:"rgb(179 141 229 / 26%)"}} key={task.id}>
               {task.name}
               <span>
                 <Link>
@@ -75,12 +78,12 @@ function DashBoad() {
           );
         })}
       {finalTasks && <li>{`You have ${finalTasks.length} completed task!`}</li>}
-    <hr />
+      <hr />
       <h2>Exprided Task:</h2>
       {expridedTask &&
         expridedTask.map((task) => {
           return (
-            <li style={{ backgroundColor: "#a2e7a2" }} key={task.id}>
+            <li style={{ backgroundColor: "#cfaaa6" }} key={task.id}>
               {task.name}
               <span>
                 <Link>

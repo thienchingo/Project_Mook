@@ -1,6 +1,8 @@
-import compare from "../../helps/utils";
+import { isEmpty } from "lodash";
+import compare, { compareDateExprided } from "../../helps/utils";
 import {
   ADD_TASK,
+  AUTO_CHECK_EXPRIDED_TASK,
   DELETE_TASK,
   FINISHED_TASK,
   GET_STATE,
@@ -126,24 +128,55 @@ const TodoReducer = (state = initialState, action) => {
       return state;
     case DELETE_TASK:
       const targetTask = state.tasks.filter((i) => i.id !== action.payload);
+      const targetTask2 = state.expridedTask.filter(
+        (i) => i.id !== action.payload
+      );
       return (state = {
         ...state,
         tasks: targetTask.sort(compare),
+        expridedTask: targetTask2.sort(compare),
         error: {
           successed: `You have been deleted task id ${action.payload}!`,
         },
       });
     case FINISHED_TASK:
-      let inprogressTask = state.tasks.filter((i) => i.id !== action.payload);
+      const inprogressTask = state.tasks.filter((i) => i.id !== action.payload);
       const finishTask = state.tasks.filter((i) => i.id === action.payload);
+      const expridedTasks = state.expridedTask.filter(
+        (i) => i.id !== action.payload
+      );
+      const expridedFnTasks = state.expridedTask.filter(
+        (i) => i.id === action.payload
+      );
       return (state = {
         ...state,
         tasks: inprogressTask.sort(compare),
-        finalTasks: [...state.finalTasks, ...finishTask].sort(compare),
+        expridedTask: expridedTasks.sort(compare),
+        finalTasks: [
+          ...state.finalTasks,
+          ...finishTask,
+          ...expridedFnTasks,
+        ].sort(compare),
         error: {
           successed: `Task id ${action.payload} had been finished!`,
         },
       });
+    case AUTO_CHECK_EXPRIDED_TASK:
+      const currentDate = new Date();
+      const listExpridedTask = state.tasks.filter((ts) =>
+        compareDateExprided(currentDate, ts)
+      );
+      const currentTasks = state.tasks.filter(
+        (ts) => !compareDateExprided(currentDate, ts)
+      );
+      if (!isEmpty(listExpridedTask)) {
+        state = {
+          ...state,
+          tasks: currentTasks.sort(compare),
+          expridedTask: [...listExpridedTask],
+        };
+      }
+      return state;
     default:
       return (state = { ...state });
   }
